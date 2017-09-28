@@ -10,7 +10,7 @@ app.get('/', function(request, response) {
 });
 
 app.get('/register', function(req, res){
-
+	
 });
 
 app.listen(app.get('port'), function() {

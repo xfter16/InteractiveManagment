@@ -19,6 +19,7 @@ class UserForm extends React.Component {
       render() {
         return (
             <form onSubmit={this.handleSubmit}>
+             <h1>React JS</h1>
                 <p>
                     <label>Имя:</label><br />
                     <input type="text" value={this.state.name} onChange={this.onChange}/>

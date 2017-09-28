@@ -1,8 +1,8 @@
-import gulp from 'gulp';
-import gutil from 'gulp-util';
-import browserify from 'browserify';
-import babelify from 'babelify';
-import source from 'vinyl-source-stream';
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var browserify = require('browserify');
+var babelify = require('babelify');
+var source = require('vinyl-source-stream');
  
 gulp.task('build', () => {
     return browserify({
