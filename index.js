@@ -1,15 +1,16 @@
 var express = require('express');
-var cool = require('cool-ascii-faces');
 var app = express();
 
 app.set('port', (process.env.PORT || 5000));
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(request, response) {
-  response.end('hello world!');
+  response.end('<h1>main page</h1>');
 
 });
-app.get('/cool', function(req, res){
-	res.send(cool());
+
+app.get('/register', function(req, res){
+
 });
 
 app.listen(app.get('port'), function() {

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Регистрация</title>
+	 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+	<form name="userForm">
+        <input type="hidden" name="id" value="0" />
+        <div class="form-group">
+            <label for="name">Имя:</label>
+            <input class="form-control" name="name" />
+        </div>
+        <div class="form-group">
+            <label for="age">Фамилия:</label>
+            <input class="form-control" name="lastname" />
+        </div>
+        <div class="form-group">
+            <label for="age">Отчество:</label>
+            <input class="form-control" name="middlename" />
+        </div>
+        <div class="form-group">
+            <label for="age">Возраст:</label>
+            <input class="form-control" name="age" />
+        </div>
+        <div class="panel-body">
+            <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+            <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
+        </div>
+    </form>
+</body>
+</html>
