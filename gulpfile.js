@@ -28,4 +28,4 @@ gulp.task('watch', ['build'], () => {
     gulp.watch('./src/**/*.jsx', ['build']);
 });
  
-gulp.task('default', ['watch']);
+gulp.task('default', ['watch']); 
