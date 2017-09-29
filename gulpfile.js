@@ -21,7 +21,7 @@ gulp.task('build', () => {
             this.emit('end');
         })
         .pipe(source('bundle.js'))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('public'));
 });
  
 gulp.task('watch', ['build'], () => {

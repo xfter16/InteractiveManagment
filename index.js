@@ -5,7 +5,11 @@ app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(request, response) {
-  response.end('<h1>main page</h1>');
+  response.end('<div id="container"></div>'
+  	+'<script src="https://unpkg.com/react@15/dist/react.js"></script>'
+  	+'<script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>'
+	+'<script src="bundle.js"></script>'
+  	);
 
 });
 
