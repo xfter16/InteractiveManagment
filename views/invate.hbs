@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <meta charset="utf-8" />
+	<script src="/regforms.js"></script>
+    <script src="/user.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script>
+    	$(function(){
+    		var map = new Map([['Дата рождения', 'birthday'], ['Моб. Телефон', 'phone'],['Адрес', 'address']]);
+    		printForm('.reg-form', map);
+    	})
+
+    </script>
+</head>
+<body>
+
+	<form id="register-form" name="userForm">
+		<div class="form-group">
+    		<label for="firstName">Имя:</label>
+      		<input readonly class="form-control" value={{firstName}}>
+      	</div>
+      	<div class="form-group">
+    		<label for="lastName">Фамилия:</label>
+      		<input readonly class="form-control" value="{{lastName}}">
+      	</div>
+
+        <input type="hidden" name="id" value="0" />
+		<div class="reg-form"></div>
+        <div class="panel-body">
+            <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+            <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
+            <a id="print" class="btn btn-sm btn-primary">Вывести всех</a>
+        </div>
+    </form>
+	<script>
+    	$('#register-form').submit(function (e) {
+	            e.preventDefault();
+	            var user = new User();
+
+	            user.id(this.elements['id'].value);
+	            user.firstName(this.elements['firstName'].value);
+	            user.lastName(this.elements['lastName'].value);
+	            user.birthday(this.elements['birthday'].value);
+	            user.phone(this.elements['phone'].value);
+	            user.address(this.elements['address'].value);
+				CreateUser(user, function(user) {
+									console.log(`Object ${user} has been posted`);	
+								});		    
+        });
+        
+
+        $("#print").click(function (e) {
+        	
+            e.preventDefault();
+            GetUsers();
+        })
+ 		
+
+        function GetUsers() {
+            $.ajax({
+                url: "/api/users",
+                type: "GET",
+                contentType: "application/json",
+                success: function (users) {
+                    $.each(users, function (index, user) {
+                        console.log(user);
+
+                    })
+                 }
+            });
+        }
+        // Изменение пользователя
+ function EditUser(userId, userFirstName, userLastName, userBirthday, userPhone, userAddress) {
+     $.ajax({
+         url: "api/users",
+         contentType: "application/json",
+         method: "PUT",
+         data: JSON.stringify({
+             firstName: user.firstName(),
+             lastName: user.lastName(),
+             birthday: user.birthday(),
+             phone: user.phone(),
+             address: user.address()
+         }),
+         success: function(user) {
+             reset();
+             console.log(user);
+             $("tr[data-rowid='" + user._id + "']").replaceWith(row(user));
+         }
+     })
+ }
+    </script>
+</body>
+<html>
