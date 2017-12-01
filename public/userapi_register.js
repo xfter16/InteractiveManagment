@@ -28,25 +28,25 @@
                     form.elements["firstName"].value = user.firstName;
                     form.elements["lastName"].value = user.lastName;
                     form.elements["birthday"].value = user.birthday;
-                    form.elements["phone"].value = user.phone;
+                    form.elements["phone"].value = user.phone;  
                     form.elements["address"].value = user.address;
                     // form.elements["role"].value = user.role;
                 }
             });
         }
         // Добавление пользователя
-        function CreateUser(user) {
+        function CreateUser(user, callback) {
             $.ajax({
                 url: "api/users",
                 contentType: "application/json",
                 method: "POST",
                 data: JSON.stringify({
-                    firstName: user.firstName(),
-                    lastName: user.lastName(),
-                    birthday: user.birthday(),
-                    phone: user.phone(),
-                    address: user.address(),
-                    role: user.role()
+                    firstName: user.FirstName(),
+                    lastName: user.LastName(),
+                    birthday: user.Birthday(),
+                    phone: user.Phone(),
+                    address: user.Address(),
+                    role: user.Role()
                 }),
                 success: function(user) {
                     console.log(`Object ${user} has been posted`);
@@ -61,12 +61,12 @@
                 method: "PUT",
                 data: JSON.stringify({
                     id: userId,
-                    firstName: user.firstName(),
-                    lastName: user.lastName(),
-                    birthday: user.birthday(),
-                    phone: user.phone(),
-                    address: user.address(),
-                    role: user.role()
+                    firstName: user.FirstName(),
+                    lastName: user.LastName(),
+                    birthday: user.Birthday(),
+                    phone: user.Phone(),
+                    address: user.Address(),
+                    role: user.Role()
                 }),
                 success: function(user) {
                     reset();

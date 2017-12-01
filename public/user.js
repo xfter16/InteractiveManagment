@@ -2,7 +2,6 @@
 
 function User(id, firstName, lastName, birthday, phone, address, role) {
 
-    console.log('User created');
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -11,35 +10,44 @@ function User(id, firstName, lastName, birthday, phone, address, role) {
     this.address = address;
     this.role = role;
 
-
-    this.id = function(newid) {
+    this.Id = function(val){
         if (!arguments.length) return id;
-        id = newid;
+        id = val;
     }
-    this.firstName = function(name) {
+    this.FirstName = function(name) {
         if (!arguments.length) return firstName;
         firstName = name;
     }
-    this.lastName = function(name) {
+    this.LastName = function(name) {
         if (!arguments.length) return lastName;
         lastName = name;
     }
-    this.birthday = function(date) {
+    this.Birthday = function(date) {
         if (!arguments.length) return birthday;
         birthday = date;
     }
-    this.phone = function(number) {
+    this.Phone = function(number) {
         if (!arguments.length) return phone;
         phone = number;
     }
-    this.address = function(adrs) {
+    this.Address = function(adrs) {
         if (!arguments.length) return address;
         address = adrs;
     }
-    this.role = function(val){
+    this.Role = function(val){
         if (!arguments.length) return role;
         role = val;
     }
+    this.getInfo = function() {
+            return `
+            id: ${id} \n
+            firstName: ${firstName} \n    
+            lastName: ${lastName} \n    
+            birthday: ${birthday} \n    
+            phone: ${phone} \n 
+            address: ${address} \n 
+            role: ${role}`
+        }
 }
 
 // function CreateUser(user) {

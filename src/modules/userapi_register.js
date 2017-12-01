@@ -47,11 +47,9 @@ var userapi = function(app, bodyParser, mongoClient, objectId) {
     //INSERT
     app.post("/api/users", jsonParser, function(req, res) {
 
-        console.log('======================================= \n POST ')
+        console.log('======================================= \n POST ');
 
         if (!req.body) return res.sendStatus(400);
-        console.log('req.body: ')
-        console.log(req.body);
 
         var u1 = new User(req.body.firstName, req.body.lastName, req.body.birthday, req.body.phone, req.body.address, req.body.role);
         
@@ -60,8 +58,6 @@ var userapi = function(app, bodyParser, mongoClient, objectId) {
             db.collection("users").insertOne(u1, function(err, result) {
 
                 if (err) return res.status(400).send();
-                console.log('u1: ')
-                console.log(u1.firstName);
                 res.send(u1);
                 db.close();
                 console.log(`INSERT user: { \n ${u1.getInfo()} \n } \n OK`);
@@ -90,7 +86,7 @@ var userapi = function(app, bodyParser, mongoClient, objectId) {
     });
 
     //UPDATE
-    app.put("/api/users", jsonParser, function(req, res) {
+    app.put("*/api/users", jsonParser, function(req, res) {
         console.log('=======================================\n PUT  ')
 
         if (!req.body) return res.sendStatus(400);

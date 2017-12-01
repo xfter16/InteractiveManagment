@@ -2,15 +2,24 @@
 // Отрисовка форм для регистрации
 //printForm(tag, new Map([label_val, for_val]))
 
-var printForm = function(tag, map) {
+var printFormMap = function(tag, map) {
     map.forEach((value, key, map) => {$(tag).append(getForm(key, value))}); 
 }
-var getForm = function(label_val, for_val) {
-    return  '<div class="form-group">' +
-                '<label for="' + for_val + '">' + label_val + ': </label>' +
-                '<input class="form-control" name="' + for_val + '" />' +
-                '</div>';
+var printForm = function(tag, getForm){
+	$(tag).append(getForm);
 }
+var getForm = function(label_val, for_val) {
+    return  `<div class="form-group">
+                    <label for="${for_val}">${label_val}: </label> 
+                    <input class="form-control" name="${for_val}"/>
+                   </div>`;
+}
+var getReadonlyForm = function(label_val, for_val, value) {
+    return `<div class="form-group">
+                    <label for="${for_val}">${label_val}: </label> 
+                    <input readonly class="form-control" name="${for_val}" value="${value}"/>
+                   </div>`;
+}	
 	/**
 	 * getCheckBox(tag, name, id, value, content, position, status)
 	 * 
@@ -31,4 +40,3 @@ var getCheckBox = function(tag, name, id, value, content, status) {
 					</div>`;
 	$(tag).append(checkBox);
 }
-

@@ -10,11 +10,22 @@ var invateLink = function(app, bodyParser, mongoClient, objectId) {
 
                 if (err) return res.status(400).send();
 
-                
                 res.render("invate.hbs", {
+                    id: user._id,
                     firstName: user.firstName,
-                    lastName: user.lastName
+                    lastName: user.lastName,
+                    birthday: user.birthday,
+                    phone: user.phone, 
+                    address: user.address,  
+                    role: user.role
                 });
+                console.log(`
+            firstName: ${user.firstName} \n    
+            lastName: ${user.lastName} \n    
+            birthday: ${user.birthday} \n    
+            phone: ${user.phone} \n 
+            address: ${user.address} \n 
+            role: ${user.role}`);
                 // res.send(user);
                 db.close();
             });

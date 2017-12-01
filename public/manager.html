@@ -11,11 +11,12 @@
     <script>
         $(function(){
             var map = new Map([['Имя', 'firstName'], ['Фамилия', 'lastName'], ['Дата рождения', 'birthday'], ['Моб. Телефон', 'phone'],['Адрес', 'address']]);
-            printForm('.reg-form', map);
+            printFormMap('.reg-form', map);
+
             //**checkBox(tag, name, id, value, content, position, status)
 
             getCheckBox('.reg-form', 'roleCheckBox', 'checkBoxRoleAdmin', 'admin', 'Админ', '');
-            getCheckBox('.reg-form', 'roleCheckBox', 'checkBoxRoleUser', 'user', 'Пользователь', '');
+            getCheckBox('.reg-form', 'roleCheckBox', 'checkBoxRoleUser', 'user', 'Пользователь', 'checked');
             getCheckBox('.reg-form', 'roleCheckBox', 'checkBoxRoleSuperAdmin', 'superadmin', 'SuperAdmin', '');
         })
     </script>
@@ -54,6 +55,18 @@
     <script src="userapi_register.js"></script>
 
     <script>
+// сброс формы
+        function reset() {
+            var form = document.forms["userForm"];
+            form.reset();
+            form.elements["id"].value = 0;
+        }
+
+        // сброс значений формы
+        $("#reset").click(function (e) {
+            e.preventDefault();
+            reset();
+        })
 
         // Добавление пользователя
         function CreateUser(user) {
@@ -62,12 +75,12 @@
                 contentType: "application/json",
                 method: "POST",
                 data: JSON.stringify({
-                    firstName: user.firstName(),
-                    lastName: user.lastName(),
-                    birthday: user.birthday(),
-                    phone: user.phone(),
-                    address: user.address(),
-                    role: user.role()
+                    firstName: user.FirstName(),
+                    lastName: user.LastName(),
+                    birthday: user.Birthday(),
+                    phone: user.Phone(),
+                    address: user.Address(),
+                    role: user.Role()
                 }),
                 success: function(user) {
                     reset();
@@ -76,15 +89,6 @@
                 }
             });
         }
-
-  
-        // сброс формы
-        function reset() {
-            var form = document.forms["userForm"];
-            form.reset();
-            form.elements["id"].value = 0;
-        }
-  
         
         // создание строки для таблицы
         var row = function (user) {
@@ -102,13 +106,7 @@
                         `</td>`+
                     `</tr>`;
         }
-        // сброс значений формы
-        $("#reset").click(function (e) {
-  
-            e.preventDefault();
-            reset();
-        })
-  
+      
         // отправка формы
         $("form").submit(function (e) {
             e.preventDefault();
@@ -116,13 +114,13 @@
 
             var id = this.elements['id'].value;
             console.log(id);
-            user.id(id);
-            user.firstName(this.elements['firstName'].value);
-            user.lastName(this.elements['lastName'].value);
-            user.birthday(this.elements['birthday'].value);
-            user.phone(this.elements['phone'].value);
-            user.address(this.elements['address'].value);
-            user.role(this.elements['roleCheckBox'].value);
+            user.Id(id);
+            user.FirstName(this.elements['firstName'].value);
+            user.LastName(this.elements['lastName'].value);
+            user.Birthday(this.elements['birthday'].value);
+            user.Phone(this.elements['phone'].value);
+            user.Address(this.elements['address'].value);
+            user.Role(this.elements['roleCheckBox'].value);
             if (id == 0){
                 console.log('CreateUser');
                 CreateUser(user);

@@ -10,13 +10,13 @@
 	<script>
     	$(function(){
     		var map = new Map([['Дата рождения', 'birthday'], ['Моб. Телефон', 'phone'],['Адрес', 'address']]);
-    		printForm('.reg-form', map);
+    		printFormMap('.reg-form', map);
     	})
-
     </script>
 </head>
 <body>
-
+	<h2>Введите персональные данные</h2>
+	<input type="hidden" name="id" value="{{id}}" />
 	<form id="register-form" name="userForm">
 		<div class="form-group">
     		<label for="firstName">Имя:</label>
@@ -27,8 +27,12 @@
       		<input readonly class="form-control" value="{{lastName}}">
       	</div>
 
-        <input type="hidden" name="id" value="0" />
+        
+
 		<div class="reg-form"></div>
+
+		<input type="hidden" name="role" value="{{role}}" />
+
         <div class="panel-body">
             <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
             <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
@@ -40,58 +44,82 @@
 	            e.preventDefault();
 	            var user = new User();
 
-	            user.id(this.elements['id'].value);
-	            user.firstName(this.elements['firstName'].value);
-	            user.lastName(this.elements['lastName'].value);
-	            user.birthday(this.elements['birthday'].value);
-	            user.phone(this.elements['phone'].value);
-	            user.address(this.elements['address'].value);
-				CreateUser(user, function(user) {
-									console.log(`Object ${user} has been posted`);	
-								});		    
+	            user.Id('{{id}}');
+	            user.FirstName('{{firstName}}');
+	            user.LastName('{{lastName}}');
+	            user.Birthday(this.elements['birthday'].value);
+	            user.Phone(this.elements['phone'].value);
+	            user.Address(this.elements['address'].value);
+	            user.Role('{{role}}');
+
+	            console.log(user.getInfo());
+				EditUser(user);		    
         });
         
+    	function reset() {
+            var form = document.forms["userForm"];
+            form.reset();
+            // form.elements["id"].value = 0;
+        }
+
+        // сброс значений формы
+        $("#reset").click(function (e) {
+            e.preventDefault();
+            reset();
+        })
 
         $("#print").click(function (e) {
-        	
             e.preventDefault();
             GetUsers();
         })
  		
 
         function GetUsers() {
-            $.ajax({
-                url: "/api/users",
-                type: "GET",
-                contentType: "application/json",
-                success: function (users) {
+            fetch('/api/users', {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              }}).then(function (users) {
                     $.each(users, function (index, user) {
                         console.log(user);
 
                     })
-                 }
-            });
+                 });
+
+            // $.ajax({
+            //     url: "/api/users",
+            //     type: "GET",
+            //     contentType: "application/json",
+            //     success: function (users) {
+            //         $.each(users, function (index, user) {
+            //             console.log(user);
+
+            //         })
+            //      }
+            // });
         }
-        // Изменение пользователя
- function EditUser(userId, userFirstName, userLastName, userBirthday, userPhone, userAddress) {
-     $.ajax({
-         url: "api/users",
-         contentType: "application/json",
-         method: "PUT",
-         data: JSON.stringify({
-             firstName: user.firstName(),
-             lastName: user.lastName(),
-             birthday: user.birthday(),
-             phone: user.phone(),
-             address: user.address()
-         }),
-         success: function(user) {
-             reset();
-             console.log(user);
-             $("tr[data-rowid='" + user._id + "']").replaceWith(row(user));
-         }
-     })
- }
+// Изменение пользователя
+        function EditUser(user) {
+            $.ajax({
+                url: "api/users",
+                contentType: "application/json",
+                method: "PUT",
+                data: JSON.stringify({
+                    id: user.Id(),
+                    firstName: user.FirstName(),
+                    lastName: user.LastName(),
+                    birthday: user.Birthday(),
+                    phone: user.Phone(),
+                    address: user.Address(),
+                    role: user.Role()
+                }),
+                success: function(user) {
+                    reset();
+                    console.log(user);
+                    // $("tr[data-rowid='" + user._id + "']").replaceWith(row(user));
+                }
+            })
+        }
     </script>
 </body>
 <html>
