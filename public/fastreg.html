@@ -5,22 +5,22 @@
 	<title>Быстрая регистрация</title>
 	<meta name="viewport" content="width=device-width" />
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 	<script src="user.js"></script>
-    <script src="userapi_register.js"></script>
     <script src="regforms.js"></script>
+    <script src="geblib.js"></script>
+    <script src="userapi_register.js"></script>
     <script>
         var printForms = function(){
                 var map = new Map([['Имя', 'firstName'], ['Фамилия', 'lastName']]);
-                printFormMap('.reg-form', map);
+                printFormMap('reg-form', map);
         }
     </script>
 </head>
 <body>
 	<h2>Регистрация нового пользователя</h2>
-	<form id="register-form" name="userForm">
+	<form id="register-form" class="register-form" name="userForm">
         <input type="hidden" name="id" value="0" />
-		<div class="reg-form"></div>
+		<div class="reg-form" id="reg-form"></div>
         <script>
             printForms();
         </script>
@@ -30,51 +30,49 @@
         </div>
     </form>
     <script>
-    	$('#register-form').submit(function (e) {
-	            e.preventDefault();
-	            var user = new User();
-
-	            user.Id(this.elements['id'].value);
-	            user.FirstName(this.elements['firstName'].value);
-	            user.LastName(this.elements['lastName'].value);
-	            user.Birthday('');
-	            user.Phone('');
-	            user.Address('');
-	            user.Role('user');
-	            CreateUser(user, console.log(user));	
-
-    			
-        });
-        
+    	
         function reset() {
-            var form = document.forms["userForm"];
+            var form = document.forms['userForm'];
             form.reset();
-            // form.elements["id"].value = 0;
         }
 
-        // сброс значений формы
-        $("#reset").click(function (e) {
-            e.preventDefault();
+        // reset form`s value
+        gebId('reset').addEventListener('click', function(event){
+            event.preventDefault();
             reset();
-        })
-        // Добавление пользователя
-        function CreateUser(user, callback) {
-            $.ajax({
-                url: "api/users",
-                contentType: "application/json",
-                method: "POST",
-                data: JSON.stringify({
-                    firstName: user.FirstName(),
-                    lastName: user.LastName(),
-                    birthday: user.Birthday(),
-                    phone: user.Phone(),
-                    address: user.Address(),
-                    role: user.Role()
-                }),
-                success: function(user) {
-                    printForm('.reg-form', getReadonlyForm('Персональная ссылка', 'invateLink', `localhost:5000/invate/${user._id}`));
+        });
 
+        //submit event
+        gebId('register-form').addEventListener('submit', function(event){
+            event.preventDefault(); 
+            var user = new User();
+
+            user.Id(this.elements['id'].value);
+            user.FirstName(this.elements['firstName'].value);
+            user.LastName(this.elements['lastName'].value);
+            user.Birthday('');
+            user.Phone('');
+            user.Address('');
+            user.Role('user');
+            CreateUser(user); 
+        });
+
+        // add new user
+        function CreateUser(user) {
+            sendCreateUser(user)
+            .then(function(user) {
+                var getReadonlyForm = function(label_val, for_val, value) {
+                    return `<div id="invateLink" class="form-group">
+                                <label for="${for_val}">${label_val}: </label> 
+                                <input readonly class="form-control" name="${for_val}" value="${value}"/>
+                            </div>`;
                 }
+                var form = gebId('invateLink');
+                if(form != null) form.parentElement.removeChild(form);  
+                createChild('reg-form', 
+                    getReadonlyForm('Персональная ссылка', 'invateLink', `localhost:5000/invate/${user._id}`)
+                );
+                reset();
             });
         }
     </script>

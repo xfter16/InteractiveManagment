@@ -49,21 +49,3 @@ function User(id, firstName, lastName, birthday, phone, address, role) {
             role: ${role}`
         }
 }
-
-// function CreateUser(user) {
-//     $.ajax({
-//         url: "api/users",
-//         contentType: "application/json",
-//         method: "POST",
-//         data: JSON.stringify({
-//             firstName: user.firstName(),
-//             lastName: user.lastName(),
-//             birthday: user.birthday(),
-//             phone: user.phone(),
-//             address: user.address()
-//         }),
-//         success: function(user) {
-//             console.log(`Object ${user} has been posted`);
-//         }
-//     });
-// }

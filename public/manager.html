@@ -5,30 +5,28 @@
     <meta name="viewport" content="width=device-width" />
     <title>Управление пользователями</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="regforms.js"></script>
     <script src="user.js"></script>
+    <script src="geblib.js"></script>
     <script>
-        $(function(){
+        function printForms(){
             var map = new Map([['Имя', 'firstName'], ['Фамилия', 'lastName'], ['Дата рождения', 'birthday'], ['Моб. Телефон', 'phone'],['Адрес', 'address']]);
-            printFormMap('.reg-form', map);
-
-            //**checkBox(tag, name, id, value, content, position, status)
-
-            getCheckBox('.reg-form', 'roleCheckBox', 'checkBoxRoleAdmin', 'admin', 'Админ', '');
-            getCheckBox('.reg-form', 'roleCheckBox', 'checkBoxRoleUser', 'user', 'Пользователь', 'checked');
-            getCheckBox('.reg-form', 'roleCheckBox', 'checkBoxRoleSuperAdmin', 'superadmin', 'SuperAdmin', '');
-        })
+            printFormMap('reg-form', map);
+            getCheckBox('reg-form', 'roleCheckBox', 'checkBoxRoleAdmin', 'admin', 'Админ', '');
+            getCheckBox('reg-form', 'roleCheckBox', 'checkBoxRoleUser', 'user', 'Пользователь', 'checked');
+            getCheckBox('reg-form', 'roleCheckBox', 'checkBoxRoleSuperAdmin', 'superadmin', 'SuperAdmin', '');
+        }
     </script>
 </head>
-<body>
+<body id='body'>
     <h2>Список пользователей</h2>
-    <form name="userForm">
+    <form id="register-form" name="userForm">
         <input type="hidden" name="id" value="0" />
 
-        <div class="reg-form"></div>
-        
-        
+        <div class="reg-form" id="reg-form"></div>
+        <script>
+            printForms();
+        </script>
         <div class="panel-body">
             <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
             <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
@@ -47,103 +45,72 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="userTable">
         </tbody>
     </table>
   
-  <!-- API -->
     <script src="userapi_register.js"></script>
 
     <script>
-// сброс формы
+// show all users
+        GetUsers();
+
+// reset form
         function reset() {
             var form = document.forms["userForm"];
             form.reset();
             form.elements["id"].value = 0;
         }
-
-        // сброс значений формы
-        $("#reset").click(function (e) {
-            e.preventDefault();
+        gebId('reset').addEventListener('click', function(event){
+            event.preventDefault();
             reset();
-        })
+        });
 
-        // Добавление пользователя
+// add new user
         function CreateUser(user) {
-            $.ajax({
-                url: "api/users",
-                contentType: "application/json",
-                method: "POST",
-                data: JSON.stringify({
-                    firstName: user.FirstName(),
-                    lastName: user.LastName(),
-                    birthday: user.Birthday(),
-                    phone: user.Phone(),
-                    address: user.Address(),
-                    role: user.Role()
-                }),
-                success: function(user) {
+                sendCreateUser(user)
+                .then(function(user){
                     reset();
-                    $("table tbody").append(row(user));
-                    console.log(`Object ${user} has been posted`);
-                }
-            });
+                    printTrNewUser(user);
+                });
         }
         
-        // создание строки для таблицы
-        var row = function (user) {
-            return  `<tr data-rowid='${user._id}'>`+
-                        `<td>${user._id}</td>`+
-                        `<td>${user.firstName}</td>`+ 
-                        `<td>${user.lastName}</td>` +
-                        `<td>${user.birthday}</td>` +
-                        `<td>${user.phone}</td>` +
-                        `<td>${user.address}</td>` +
-                        `<td>${user.role}</td>` +
-                        `<td>` +
-                            `<a class='editLink' data-id='${user._id}'>Изменить</a> |`  +
-                            `<a class='removeLink' data-id='${user._id}'>Удалить</a>` +
-                        `</td>`+
-                    `</tr>`;
-        }
+        
       
-        // отправка формы
-        $("form").submit(function (e) {
-            e.preventDefault();
+// submit event / send form
+        gebId('register-form').addEventListener('submit', function(event){
+            event.preventDefault(); 
             var user = new User();
 
-            var id = this.elements['id'].value;
-            console.log(id);
-            user.Id(id);
+            user.Id(this.elements['id'].value);
             user.FirstName(this.elements['firstName'].value);
             user.LastName(this.elements['lastName'].value);
             user.Birthday(this.elements['birthday'].value);
             user.Phone(this.elements['phone'].value);
             user.Address(this.elements['address'].value);
             user.Role(this.elements['roleCheckBox'].value);
-            if (id == 0){
+            if (this.elements['id'].value == 0){
                 console.log('CreateUser');
                 CreateUser(user);
             }
             else{
-                console.log('EditUser')
-                EditUser(id, user);
+                console.log('EditUser');
+                EditUser(user.Id(), user);
             }
+
         });
-  
-        // нажимаем на ссылку Изменить
-        $("body").on("click", ".editLink", function () {
-            var id = $(this).data("id");
-            GetUser(id);
-        })
-        // нажимаем на ссылку Удалить
-        $("body").on("click", ".removeLink", function () {
-            var id = $(this).data("id");
-            DeleteUser(id);
-        })
-  
-        // загрузка пользователей
-        GetUsers();
+
+//edit & remove user 
+        gebId('userTable').onclick = function(event){
+            var target = event.target;
+            var className = target.className;
+            switch(className){
+                case 'editLink': GetUser(target.attributes[1].value);
+                break;
+                case 'removeLink': DeleteUser(target.attributes[1].value);
+                break;
+            }
+        }
     </script>
 </body>
 </html>
